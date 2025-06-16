@@ -1,0 +1,4 @@
+6383442c|Conferencia Tech 2025|2025-06-30 22:27|Centro de Convenciones|Conferencia anual de tecnología|200
+1ef32bd4|Reunión de Equipo - change nombre|2025-06-18 22:27|Sala de Juntas|Reunión mensual del equipo de desarrollo|15
+fdd08353|Workshop React|2025-06-10 22:27|Aula 301|Taller práctico de React y Hooks|30
+2d32cabc|test - 1|2025-06-20 10:00|Buenos Aires|testeando|50

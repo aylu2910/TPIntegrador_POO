@@ -1,0 +1,3 @@
+1ef32bd4|cea64bc8|aylen|aylen@gmail.com|11111111
+6383442c|99f920d6|Juan Pérez|juan@email.com|123456789
+6383442c|1c276301|María García|maria@email.com|987654321
