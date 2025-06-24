@@ -1,3 +1,9 @@
+package logic;
+
+import model.Asistente;
+import model.Evento;
+import utils.FileManager;
+
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;

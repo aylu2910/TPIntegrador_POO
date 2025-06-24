@@ -1,3 +1,11 @@
+package view.evento;
+
+import logic.EventoService;
+import model.Asistente;
+import model.Evento;
+import utils.AsistenteValidator;
+import utils.ValidationResult;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -7,6 +15,7 @@ import java.awt.event.ActionListener;
 public class DetalleEventoDialog extends JDialog {
   private Evento evento;
   private EventoService eventoService;
+  private AsistenteValidator asistenteValidator;
 
   private JLabel lblNombre, lblFecha, lblUbicacion, lblDescripcion, lblCapacidad;
   private JTable tablaAsistentes;
@@ -223,40 +232,7 @@ public class DetalleEventoDialog extends JDialog {
     String email = txtEmailAsistente.getText().trim();
     String telefono = txtTelefonoAsistente.getText().trim();
 
-    // Validaciones
-    if (nombre.isEmpty()) {
-      JOptionPane.showMessageDialog(this, "El nombre es requerido.", "Error", JOptionPane.ERROR_MESSAGE);
-      txtNombreAsistente.requestFocus();
-      return;
-    }
-
-    if (email.isEmpty() || !email.contains("@")) {
-      JOptionPane.showMessageDialog(this, "Ingrese un email válido.", "Error", JOptionPane.ERROR_MESSAGE);
-      txtEmailAsistente.requestFocus();
-      return;
-    }
-
-    if (telefono.isEmpty() || telefono.length() < 7) {
-      JOptionPane.showMessageDialog(this, "Ingrese un teléfono válido (mínimo 7 dígitos).", "Error", JOptionPane.ERROR_MESSAGE);
-      txtTelefonoAsistente.requestFocus();
-      return;
-    }
-
-    // Verificar capacidad
-    if (!evento.puedeAgregarAsistente()) {
-      JOptionPane.showMessageDialog(this, "El evento ha alcanzado su capacidad máxima.", "Capacidad Completa", JOptionPane.WARNING_MESSAGE);
-      return;
-    }
-
-    // Verificar duplicados por email
-    boolean emailExiste = evento.getAsistentes().stream()
-            .anyMatch(a -> a.getEmail().equalsIgnoreCase(email));
-
-    if (emailExiste) {
-      JOptionPane.showMessageDialog(this, "Ya existe un asistente con ese email.", "Email Duplicado", JOptionPane.WARNING_MESSAGE);
-      txtEmailAsistente.requestFocus();
-      return;
-    }
+    ValidationResult validationResult = asistenteValidator.validar(nombre, email, telefono, evento);
 
     // Crear y agregar asistente
     Asistente nuevoAsistente = new Asistente(nombre, email, telefono);

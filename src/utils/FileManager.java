@@ -1,3 +1,8 @@
+package utils;
+
+import model.Asistente;
+import model.Evento;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +39,7 @@ public class FileManager {
     File file = new File(EVENTOS_FILE);
 
     if (!file.exists()) {
-      return eventos; // Retorna lista vacía si no existe el archivo
+      return eventos;
     }
 
     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -90,7 +95,7 @@ public class FileManager {
     File file = new File(ASISTENTES_FILE);
 
     if (!file.exists()) {
-      return asistentesPorEvento; // Retorna mapa vacío si no existe el archivo
+      return asistentesPorEvento;
     }
 
     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {

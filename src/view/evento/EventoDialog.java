@@ -1,3 +1,7 @@
+package view.evento;
+
+import model.Evento;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
