@@ -2,6 +2,74 @@
 
 ```mermaid
 classDiagram
+%% Clases del Modelo (model package)
+    class Asistente {
+        -String id
+        -String nombre
+        -String email
+        -String telefono
+        +Asistente(String nombre, String email, String telefono)
+        +Asistente(String id, String nombre, String email, String telefono)
+        +getId() String
+        +getNombre() String
+        +getEmail() String
+        +getTelefono() String
+        +isValidEmail() boolean
+        +isValidTelefono() boolean
+        +isValid() boolean
+        +toString() String
+        +equals(Object obj) boolean
+        +hashCode() int
+    }
+
+    class Conferencista {
+        -String areaDeEspecialidad
+        -String biografia
+        +Conferencista(String nombre, String email, String telefono, String areaDeEspecialidad, String biografia)
+        +Conferencista(String id, String nombre, String email, String telefono, String areaDeEspecialidad, String biografia)
+        +getAreaDeEspecialidad() String
+        +setAreaDeEspecialidad(String areaDeEspecialidad)
+        +getBiografia() String
+        +setBiografia(String biografia)
+        +toString() String
+    }
+
+    class Invitado {
+        -List~String~ intereses
+        -String comentarios
+        +Invitado(String nombre, String email, String telefono, List~String~ intereses, String comentarios)
+        +Invitado(String id, String nombre, String email, String telefono, List~String~ intereses, String comentarios)
+        +getIntereses() List~String~
+        +setIntereses(List~String~ intereses)
+        +getComentarios() String
+        +setComentarios(String comentarios)
+        +toString() String
+    }
+
+    class Organizador {
+        -String rol
+        -List~String~ responsabilidades
+        +Organizador(String nombre, String email, String telefono, String rol, List~String~ responsabilidades)
+        +Organizador(String id, String nombre, String email, String telefono, String rol, List~String~ responsabilidades)
+        +getRol() String
+        +setRol(String rol)
+        +getResponsabilidades() List~String~
+        +setResponsabilidades(List~String~ responsabilidades)
+        +toString() String
+    }
+
+    class Sponsor {
+        -String empresa
+        -double montoPatrocinio
+        +Sponsor(String nombre, String email, String telefono, String empresa, double montoPatrocinio)
+        +Sponsor(String id, String nombre, String email, String telefono, String empresa, double montoPatrocinio)
+        +getEmpresa() String
+        +setEmpresa(String empresa)
+        +getMontoPatrocinio() double
+        +setMontoPatrocinio(double montoPatrocinio)
+        +toString() String
+    }
+
     class Evento {
         -String id
         -String nombre
@@ -10,155 +78,60 @@ classDiagram
         -String descripcion
         -int capacidadMaxima
         -List~Asistente~ asistentes
-        
-        +Evento(nombre, fechaHora, ubicacion, descripcion, capacidadMaxima)
+        +Evento(String nombre, LocalDateTime fechaHora, String ubicacion, String descripcion, int capacidadMaxima)
+        +Evento(String id, String nombre, LocalDateTime fechaHora, String ubicacion, String descripcion, int capacidadMaxima)
+        +getId() String
+        +getNombre() String
+        +getFechaHora() LocalDateTime
+        +getUbicacion() String
+        +getDescripcion() String
+        +getCapacidadMaxima() int
+        +getAsistentes() List~Asistente~
         +getCantidadAsistentes() int
         +puedeAgregarAsistente() boolean
-        +agregarAsistente(asistente) boolean
-        +removerAsistente(asistenteId) boolean
+        +agregarAsistente(Asistente asistente) boolean
+        +removerAsistente(String asistenteId) boolean
         +getFechaFormateada() String
         +esFuturo() boolean
+        +toString() String
     }
-    
-    class Asistente {
-        #String id
-        #String nombre
-        #String email
-        #String telefono
-        
-        +Asistente(nombre, email, telefono)
-        +isValidEmail() boolean
-        +isValidTelefono() boolean
-        +isValid() boolean
-    }
-    
-    class Conferencista {
-        -String areaDeEspecialidad
-        -String biografia
-        
-        +Conferencista(nombre, email, telefono, areaDeEspecialidad, biografia)
-    }
-    
-    class Invitado {
-        -List~String~ intereses
-        -String comentarios
-        
-        +Invitado(nombre, email, telefono, intereses, comentarios)
-    }
-    
-    class Sponsor {
-        -String empresa
-        -double montoPatrocinio
-        -String tipoPatrocinio
-        
-        +Sponsor(nombre, email, telefono, empresa, montoPatrocinio, tipoPatrocinio)
-        +getMontoPatrocinio() double
-        +getTipoPatrocinio() String
-    }
-    
-    class Organizador {
-        -String rol
-        -List~String~ responsabilidades
-        -String departamento
-        
-        +Organizador(nombre, email, telefono, rol, responsabilidades, departamento)
-        +agregarResponsabilidad(responsabilidad)
-        +removerResponsabilidad(responsabilidad)
-    }
-    
-    %% ===============================================
-    %% PACKAGE LOGIC - Lógica de Negocio
-    %% ===============================================
-    
+
+%% Lógica de Negocio (logic package)
     class EventoService {
         -List~Evento~ eventos
         -FileManager fileManager
-        
         +EventoService()
-        -cargarDatos()
-        +guardarDatos()
-        +crearEvento(evento)
-        +actualizarEvento(eventoActualizado)
-        +eliminarEvento(eventoId)
-        +obtenerEventoPorId(id) Evento
+        -cargarDatos() void
+        +guardarDatos() void
+        +crearEvento(Evento evento) void
+        +actualizarEvento(Evento eventoActualizado) void
+        +eliminarEvento(String eventoId) void
+        +obtenerEventoPorId(String id) Evento
         +obtenerTodosLosEventos() List~Evento~
         +obtenerEventosFuturos() List~Evento~
         +obtenerEventosPasados() List~Evento~
-        +registrarAsistente(eventoId, asistente) boolean
-        +removerAsistente(eventoId, asistenteId) boolean
-        +existeEvento(nombre, fechaHora) boolean
+        +registrarAsistente(String eventoId, Asistente asistente) boolean
+        +removerAsistente(String eventoId, String asistenteId) boolean
+        +existeEvento(String nombre, LocalDateTime fechaHora) boolean
         +getTotalEventos() int
         +getTotalAsistentes() int
-        +buscarEventos(filtro) List~Evento~
+        +buscarEventos(String filtro) List~Evento~
     }
+
+%% Utilidades (utils package)
     class FileManager {
         -String EVENTOS_FILE$
         -String ASISTENTES_FILE$
         -String DELIMITER$
         -DateTimeFormatter DATE_FORMATTER$
-        
-        +guardarEventos(eventos)
+        +guardarEventos(List~Evento~ eventos) void
         +cargarEventos() List~Evento~
-        +guardarAsistentes(asistentesPorEvento)
+        +guardarAsistentes(Map~String, List~Asistente~~ asistentesPorEvento) void
         +cargarAsistentes() Map~String, List~Asistente~~
         +archivosExisten() boolean
     }
-    
-    class AsistenteValidator {
-        -Pattern EMAIL_PATTERN$
-        -Pattern TELEFONO_PATTERN$
-        -int MIN_LONGITUD_NOMBRE$
-        -int MAX_LONGITUD_NOMBRE$
-        -int MIN_LONGITUD_TELEFONO$
-        -int MAX_LONGITUD_TELEFONO$
-        
-        +validar(nombre, email, telefono, evento) ValidationResult
-        +validarNombre(nombre) ValidationResult
-        +validarEmail(email) ValidationResult
-        +validarTelefono(telefono) ValidationResult
-        +validarCapacidadEvento(evento) ValidationResult
-        +validarEmailDuplicado(email, evento) ValidationResult
-        +validarAsistenteCompleto(asistente) ValidationResult
-    }
-    
-    class ValidationResult {
-        -List~ValidationErrorDetail~ errors
-        
-        +ValidationResult()
-        +addError(type, message)
-        +addErrors(newErrors)
-        +isValid() boolean
-        +getErrors() List~ValidationErrorDetail~
-        +getFirstErrorMessage() String
-        +getAllErrorMessages() String
-        +hasErrorType(type) boolean
-    }
-    
-    class ValidationErrorDetail {
-        -ValidationError type
-        -String message
-        
-        +ValidationErrorDetail(type, message)
-        +getType() ValidationError
-        +getMessage() String
-    }
-    
-    class ValidationError {
-        <<enumeration>>
-        NOMBRE_REQUERIDO
-        NOMBRE_MUY_CORTO
-        NOMBRE_MUY_LARGO
-        NOMBRE_FORMATO_INVALIDO
-        EMAIL_REQUERIDO
-        EMAIL_FORMATO_INVALIDO
-        EMAIL_DUPLICADO
-        TELEFONO_REQUERIDO
-        TELEFONO_MUY_CORTO
-        TELEFONO_MUY_LARGO
-        TELEFONO_FORMATO_INVALIDO
-        CAPACIDAD_COMPLETA
-    }
 
+%% Vistas principales (view package)
     class MainFrame {
         -EventoService eventoService
         -JTable tablaEventos
@@ -168,391 +141,18 @@ classDiagram
         -JLabel lblEstatus
         -CalendarioPanel calendarioPanel
         -JTabbedPane tabbedPane
-        
         +MainFrame()
-        -initializeComponents()
-        -setupLayout()
-        -setupEventListeners()
-        -actualizarTabla(filtro)
-        -actualizarEstatus(cantidadMostrada, filtro)
-        -nuevoEvento()
-        -editarEvento()
-        -eliminarEvento()
-        -verDetalles()
-        +actualizarVistas()
-        -buscarEventoPorNombre(nombre) Evento
-        -crearDatosPrueba()
+        -initializeComponents() void
+        -setupLayout() void
+        -setupEventListeners() void
+        -actualizarTabla(String filtro) void
+        +actualizarVistas() void
+        -nuevoEvento() void
+        -editarEvento() void
+        -eliminarEvento() void
+        -verDetalles() void
     }
-    
-    class EventoDialog {
-        -JTextField txtNombre, txtUbicacion
-        -JTextArea txtDescripcion
-        -JTextField txtFecha, txtHora
-        -JSpinner spnCapacidad
-        -JButton btnGuardar, btnCancelar
-        -Evento evento
-        -boolean confirmado
-        
-        +EventoDialog(parent, evento)
-        -initializeComponents()
-        -setupLayout()
-        -setupEventListeners()
-        -cargarDatos()
-        -guardar()
-        -validarCampos() boolean
-        -parsearFechaHora() LocalDateTime
-        +isConfirmado() boolean
-        +getEvento() Evento
-    }
-    
-    class DetalleEventoDialog {
-        -Evento evento
-        -EventoService eventoService
-        -AsistenteValidator asistenteValidator
-        -JLabel lblNombre, lblFecha, lblUbicacion, lblDescripcion, lblCapacidad
-        -JTable tablaAsistentes
-        -DefaultTableModel tableModel
-        -JTextField txtNombreAsistente, txtEmailAsistente, txtTelefonoAsistente
-        -JButton btnAgregar, btnQuitar, btnCerrar
-        
-        +DetalleEventoDialog(parent, evento, eventoService)
-        -initializeComponents()
-        -setupLayout()
-        -setupEventListeners()
-        -cargarDatos()
-        -actualizarTablaAsistentes()
-        -agregarAsistente()
-        -quitarAsistente()
-    }
-    
-    class CalendarioPanel {
-        -CalendarioTableModel calendarioModel
-        -JTable tablaCalendario
-        -JLabel lblTituloMes
-        -JButton btnAnterior, btnSiguiente, btnHoy
-        -EventoService eventoService
-        -MainFrame parentFrame
-        
-        +CalendarioPanel(eventoService, parentFrame)
-        -initializeComponents()
-        -setupLayout()
-        -setupEventListeners()
-        -cambiarMes(direccion)
-        -irAHoy()
-        -actualizarTitulo()
-        +refrescarCalendario()
-        -abrirDialogoNuevoEvento(fecha)
-        -mostrarEventosDelDia(dia)
-    }
-    
-    class CalendarioTableModel {
-        -String[] DIAS_SEMANA$
-        -int FILAS$
-        -int COLUMNAS$
-        -YearMonth mesActual
-        -LocalDate primerDiaGrid
-        -EventoService eventoService
-        -List~Evento~ eventosDelMes
-        
-        +CalendarioTableModel(eventoService)
-        +getRowCount() int
-        +getColumnCount() int
-        +getColumnName(column) String
-        +getValueAt(rowIndex, columnIndex) Object
-        +isCellEditable(rowIndex, columnIndex) boolean
-        +setMes(nuevoMes)
-        +getMesActual() YearMonth
-        +getTituloMes() String
-        +getFechaEnPosicion(row, column) LocalDate
-        -calcularPrimerDia()
-        -cargarEventosDelMes()
-    }
-    
-    class DiaCalendario {
-        -LocalDate fecha
-        -boolean delMesActual
-        -List~Evento~ eventos
-        
-        +getFecha() LocalDate
-        +setFecha(fecha)
-        +isDelMesActual() boolean
-        +setDelMesActual(delMesActual)
-        +getEventos() List~Evento~
-        +setEventos(eventos)
-        +getCantidadEventos() int
-        +tieneEventos() boolean
-        +toString() String
-    }
-    
-    class CalendarioCellRenderer {
-        -Color COLOR_HOY$
-        -Color COLOR_CON_EVENTOS$
-        -Color COLOR_OTRO_MES$
-        -Color COLOR_WEEKEND$
-        -Color COLOR_NORMAL$
-        
-        +getTableCellRendererComponent(...) Component
-        -createCellText(dia) String
-        -configurarColores(dia, isSelected, column, table)
-        -configurarBorde(dia)
-        -configurarFont(dia)
-        -createTooltip(dia) String
-    }
-    
-    class Main {
-        +main(args) void$
-    }
-    
-    %% ===============================================
-    %% RELACIONES
-    %% ===============================================
-    
-    %% Herencia
-    Conferencista --|> Asistente : extends
-    Invitado --|> Asistente : extends
-    Sponsor --|> Asistente : extends
-    Organizador --|> Asistente : extends
-    
-    %% Composición y Agregación
-    Evento *-- Asistente : contains 1..*
-    EventoService *-- Evento : manages 0..*
-    EventoService *-- FileManager : uses
-    MainFrame *-- EventoService : uses
-    MainFrame *-- CalendarioPanel : contains
-    CalendarioPanel *-- CalendarioTableModel : uses
-    CalendarioTableModel +-- DiaCalendario : inner class
-    DetalleEventoDialog *-- AsistenteValidator : uses
-    
-    %% Dependencias
-    EventoService ..> Asistente : creates
-    AsistenteValidator ..> ValidationResult : returns
-    ValidationResult *-- ValidationErrorDetail : contains
-    ValidationErrorDetail *-- ValidationError : uses
-    CalendarioTableModel ..> DiaCalendario : creates
-    
-    %% Uso/Asociación
-    Main --> MainFrame : creates
-    MainFrame --> EventoDialog : creates
-    MainFrame --> DetalleEventoDialog : creates
-    CalendarioPanel --> EventoDialog : creates
-    CalendarioTableModel --> EventoService : queries
-    CalendarioCellRenderer ..> DiaCalendario : renders
-    
-    %% Packages
-    classDef modelClass fill:#e1f5fe
-    classDef logicClass fill:#f3e5f5
-    classDef utilsClass fill:#fff3e0
-    classDef viewClass fill:#e8f5e8
-    classDef mainClass fill:#ffebee
-    
-    class Evento,Asistente,Conferencista,Invitado,Sponsor,Organizador modelClass
-    class EventoService logicClass
-    class FileManager,AsistenteValidator,ValidationResult,ValidationErrorDetail,ValidationError utilsClass
-    class MainFrame,EventoDialog,DetalleEventoDialog,CalendarioPanel,CalendarioTableModel,DiaCalendario,CalendarioCellRenderer viewClass
-    class Main mainClass
-# 📊 Diagrama UML - Sistema de Gestión de Eventos
 
-```mermaid
-classDiagram
-    %% ===============================================
-    %% PACKAGE MODEL - Clases de Dominio
-    %% ===============================================
-    
-    class Evento {
-        -String id
-        -String nombre
-        -LocalDateTime fechaHora
-        -String ubicacion
-        -String descripcion
-        -int capacidadMaxima
-        -List~Asistente~ asistentes
-        
-        +Evento(nombre, fechaHora, ubicacion, descripcion, capacidadMaxima)
-        +getCantidadAsistentes() int
-        +puedeAgregarAsistente() boolean
-        +agregarAsistente(asistente) boolean
-        +removerAsistente(asistenteId) boolean
-        +getFechaFormateada() String
-        +esFuturo() boolean
-    }
-    
-    class Asistente {
-        #String id
-        #String nombre
-        #String email
-        #String telefono
-        
-        +Asistente(nombre, email, telefono)
-        +isValidEmail() boolean
-        +isValidTelefono() boolean
-        +isValid() boolean
-    }
-    
-    class Conferencista {
-        -String areaDeEspecialidad
-        -String biografia
-        
-        +Conferencista(nombre, email, telefono, areaDeEspecialidad, biografia)
-    }
-    
-    class Invitado {
-        -List~String~ intereses
-        -String comentarios
-        
-        +Invitado(nombre, email, telefono, intereses, comentarios)
-    }
-    
-    class Sponsor {
-        -String empresa
-        -double montoPatrocinio
-        -String tipoPatrocinio
-        
-        +Sponsor(nombre, email, telefono, empresa, montoPatrocinio, tipoPatrocinio)
-        +getMontoPatrocinio() double
-        +getTipoPatrocinio() String
-    }
-    
-    class Organizador {
-        -String rol
-        -List~String~ responsabilidades
-        -String departamento
-        
-        +Organizador(nombre, email, telefono, rol, responsabilidades, departamento)
-        +agregarResponsabilidad(responsabilidad)
-        +removerResponsabilidad(responsabilidad)
-    }
-    
-    %% ===============================================
-    %% PACKAGE LOGIC - Lógica de Negocio
-    %% ===============================================
-    
-    class EventoService {
-        -List~Evento~ eventos
-        -FileManager fileManager
-        
-        +EventoService()
-        -cargarDatos()
-        +guardarDatos()
-        +crearEvento(evento)
-        +actualizarEvento(eventoActualizado)
-        +eliminarEvento(eventoId)
-        +obtenerEventoPorId(id) Evento
-        +obtenerTodosLosEventos() List~Evento~
-        +obtenerEventosFuturos() List~Evento~
-        +obtenerEventosPasados() List~Evento~
-        +registrarAsistente(eventoId, asistente) boolean
-        +removerAsistente(eventoId, asistenteId) boolean
-        +existeEvento(nombre, fechaHora) boolean
-        +getTotalEventos() int
-        +getTotalAsistentes() int
-        +buscarEventos(filtro) List~Evento~
-    }
-    
-    %% ===============================================
-    %% PACKAGE UTILS - Utilities y Validaciones
-    %% ===============================================
-    
-    class FileManager {
-        -String EVENTOS_FILE$
-        -String ASISTENTES_FILE$
-        -String DELIMITER$
-        -DateTimeFormatter DATE_FORMATTER$
-        
-        +guardarEventos(eventos)
-        +cargarEventos() List~Evento~
-        +guardarAsistentes(asistentesPorEvento)
-        +cargarAsistentes() Map~String, List~Asistente~~
-        +archivosExisten() boolean
-    }
-    
-    class AsistenteValidator {
-        -Pattern EMAIL_PATTERN$
-        -Pattern TELEFONO_PATTERN$
-        -int MIN_LONGITUD_NOMBRE$
-        -int MAX_LONGITUD_NOMBRE$
-        -int MIN_LONGITUD_TELEFONO$
-        -int MAX_LONGITUD_TELEFONO$
-        
-        +validar(nombre, email, telefono, evento) ValidationResult
-        +validarNombre(nombre) ValidationResult
-        +validarEmail(email) ValidationResult
-        +validarTelefono(telefono) ValidationResult
-        +validarCapacidadEvento(evento) ValidationResult
-        +validarEmailDuplicado(email, evento) ValidationResult
-        +validarAsistenteCompleto(asistente) ValidationResult
-    }
-    
-    class ValidationResult {
-        -List~ValidationErrorDetail~ errors
-        
-        +ValidationResult()
-        +addError(type, message)
-        +addErrors(newErrors)
-        +isValid() boolean
-        +getErrors() List~ValidationErrorDetail~
-        +getFirstErrorMessage() String
-        +getAllErrorMessages() String
-        +hasErrorType(type) boolean
-    }
-    
-    class ValidationErrorDetail {
-        -ValidationError type
-        -String message
-        
-        +ValidationErrorDetail(type, message)
-        +getType() ValidationError
-        +getMessage() String
-    }
-    
-    class ValidationError {
-        <<enumeration>>
-        NOMBRE_REQUERIDO
-        NOMBRE_MUY_CORTO
-        NOMBRE_MUY_LARGO
-        NOMBRE_FORMATO_INVALIDO
-        EMAIL_REQUERIDO
-        EMAIL_FORMATO_INVALIDO
-        EMAIL_DUPLICADO
-        TELEFONO_REQUERIDO
-        TELEFONO_MUY_CORTO
-        TELEFONO_MUY_LARGO
-        TELEFONO_FORMATO_INVALIDO
-        CAPACIDAD_COMPLETA
-    }
-    
-    %% ===============================================
-    %% PACKAGE VIEW - Vista Principal
-    %% ===============================================
-    
-    class MainFrame {
-        -EventoService eventoService
-        -JTable tablaEventos
-        -DefaultTableModel tableModel
-        -JButton btnNuevo, btnEditar, btnEliminar, btnDetalles
-        -JButton btnFuturos, btnPasados, btnTodos
-        -JLabel lblEstatus
-        -CalendarioPanel calendarioPanel
-        -JTabbedPane tabbedPane
-        
-        +MainFrame()
-        -initializeComponents()
-        -setupLayout()
-        -setupEventListeners()
-        -actualizarTabla(filtro)
-        -actualizarEstatus(cantidadMostrada, filtro)
-        -nuevoEvento()
-        -editarEvento()
-        -eliminarEvento()
-        -verDetalles()
-        +actualizarVistas()
-        -buscarEventoPorNombre(nombre) Evento
-        -crearDatosPrueba()
-    }
-    
-    %% ===============================================
-    %% PACKAGE VIEW.EVENTO - Diálogos de Eventos
-    %% ===============================================
-    
     class EventoDialog {
         -JTextField txtNombre, txtUbicacion
         -JTextArea txtDescripcion
@@ -561,43 +161,37 @@ classDiagram
         -JButton btnGuardar, btnCancelar
         -Evento evento
         -boolean confirmado
-        
-        +EventoDialog(parent, evento)
-        -initializeComponents()
-        -setupLayout()
-        -setupEventListeners()
-        -cargarDatos()
-        -guardar()
+        +EventoDialog(Frame parent, Evento evento)
+        -initializeComponents() void
+        -setupLayout() void
+        -setupEventListeners() void
+        -cargarDatos() void
+        -guardar() void
         -validarCampos() boolean
         -parsearFechaHora() LocalDateTime
         +isConfirmado() boolean
         +getEvento() Evento
     }
-    
+
     class DetalleEventoDialog {
         -Evento evento
         -EventoService eventoService
-        -AsistenteValidator asistenteValidator
         -JLabel lblNombre, lblFecha, lblUbicacion, lblDescripcion, lblCapacidad
         -JTable tablaAsistentes
         -DefaultTableModel tableModel
         -JTextField txtNombreAsistente, txtEmailAsistente, txtTelefonoAsistente
         -JButton btnAgregar, btnQuitar, btnCerrar
-        
-        +DetalleEventoDialog(parent, evento, eventoService)
-        -initializeComponents()
-        -setupLayout()
-        -setupEventListeners()
-        -cargarDatos()
-        -actualizarTablaAsistentes()
-        -agregarAsistente()
-        -quitarAsistente()
+        +DetalleEventoDialog(Frame parent, Evento evento, EventoService eventoService)
+        -initializeComponents() void
+        -setupLayout() void
+        -setupEventListeners() void
+        -cargarDatos() void
+        -actualizarTablaAsistentes() void
+        -agregarAsistente() void
+        -quitarAsistente() void
     }
-    
-    %% ===============================================
-    %% PACKAGE VIEW.CALENDARIO - Vista de Calendario
-    %% ===============================================
-    
+
+%% Calendario (view.calendario package)
     class CalendarioPanel {
         -CalendarioTableModel calendarioModel
         -JTable tablaCalendario
@@ -605,133 +199,98 @@ classDiagram
         -JButton btnAnterior, btnSiguiente, btnHoy
         -EventoService eventoService
         -MainFrame parentFrame
-        
-        +CalendarioPanel(eventoService, parentFrame)
-        -initializeComponents()
-        -setupLayout()
-        -setupEventListeners()
-        -cambiarMes(direccion)
-        -irAHoy()
-        -actualizarTitulo()
-        +refrescarCalendario()
-        -abrirDialogoNuevoEvento(fecha)
-        -mostrarEventosDelDia(dia)
+        +CalendarioPanel(EventoService eventoService, MainFrame parentFrame)
+        -initializeComponents() void
+        -setupLayout() void
+        -setupEventListeners() void
+        +refrescarCalendario() void
+        -abrirDialogoNuevoEvento(LocalDate fecha) void
+        -mostrarEventosDelDia(DiaCalendario dia) void
     }
-    
+
     class CalendarioTableModel {
         -String[] DIAS_SEMANA$
-        -int FILAS$
-        -int COLUMNAS$
+        -int FILAS$, COLUMNAS$
         -YearMonth mesActual
         -LocalDate primerDiaGrid
         -EventoService eventoService
         -List~Evento~ eventosDelMes
-        
-        +CalendarioTableModel(eventoService)
+        +CalendarioTableModel(EventoService eventoService)
         +getRowCount() int
         +getColumnCount() int
-        +getColumnName(column) String
-        +getValueAt(rowIndex, columnIndex) Object
-        +isCellEditable(rowIndex, columnIndex) boolean
-        +setMes(nuevoMes)
+        +getColumnName(int column) String
+        +getValueAt(int rowIndex, int columnIndex) Object
+        +setMes(YearMonth nuevoMes) void
         +getMesActual() YearMonth
         +getTituloMes() String
-        +getFechaEnPosicion(row, column) LocalDate
-        -calcularPrimerDia()
-        -cargarEventosDelMes()
+        +getFechaEnPosicion(int row, int column) LocalDate
+        -calcularPrimerDia() void
+        -cargarEventosDelMes() void
     }
-    
+
+    class CalendarioCellRenderer {
+        -Color COLOR_HOY$, COLOR_CON_EVENTOS$, COLOR_OTRO_MES$, COLOR_WEEKEND$, COLOR_NORMAL$
+        +getTableCellRendererComponent(...) Component
+        -createCellText(DiaCalendario dia) String
+        -configurarColores(...) void
+        -configurarBorde(DiaCalendario dia) void
+        -configurarFont(DiaCalendario dia) void
+        -createTooltip(DiaCalendario dia) String
+    }
+
     class DiaCalendario {
         -LocalDate fecha
         -boolean delMesActual
         -List~Evento~ eventos
-        
         +getFecha() LocalDate
-        +setFecha(fecha)
+        +setFecha(LocalDate fecha)
         +isDelMesActual() boolean
-        +setDelMesActual(delMesActual)
+        +setDelMesActual(boolean delMesActual)
         +getEventos() List~Evento~
-        +setEventos(eventos)
+        +setEventos(List~Evento~ eventos)
         +getCantidadEventos() int
         +tieneEventos() boolean
         +toString() String
     }
-    
-    class CalendarioCellRenderer {
-        -Color COLOR_HOY$
-        -Color COLOR_CON_EVENTOS$
-        -Color COLOR_OTRO_MES$
-        -Color COLOR_WEEKEND$
-        -Color COLOR_NORMAL$
-        
-        +getTableCellRendererComponent(...) Component
-        -createCellText(dia) String
-        -configurarColores(dia, isSelected, column, table)
-        -configurarBorde(dia)
-        -configurarFont(dia)
-        -createTooltip(dia) String
-    }
-    
-    %% ===============================================
-    %% MAIN CLASS
-    %% ===============================================
-    
+
     class Main {
-        +main(args) void$
+        +main(String[] args)$ void
     }
-    
-    %% ===============================================
-    %% RELACIONES
-    %% ===============================================
-    
-    %% Herencia
-    Conferencista --|> Asistente : extends
-    Invitado --|> Asistente : extends
-    Sponsor --|> Asistente : extends
-    Organizador --|> Asistente : extends
-    
-    %% Composición y Agregación
-    Evento *-- Asistente : contains 1..*
-    EventoService *-- Evento : manages 0..*
-    EventoService *-- FileManager : uses
-    MainFrame *-- EventoService : uses
-    MainFrame *-- CalendarioPanel : contains
-    CalendarioPanel *-- CalendarioTableModel : uses
-    CalendarioTableModel +-- DiaCalendario : inner class
-    DetalleEventoDialog *-- AsistenteValidator : uses
-    
-    %% Dependencias
-    EventoService ..> Asistente : creates
-    AsistenteValidator ..> ValidationResult : returns
-    ValidationResult *-- ValidationErrorDetail : contains
-    ValidationErrorDetail *-- ValidationError : uses
-    CalendarioTableModel ..> DiaCalendario : creates
-    
-    %% Uso/Asociación
-    Main --> MainFrame : creates
-    MainFrame --> EventoDialog : creates
-    MainFrame --> DetalleEventoDialog : creates
-    CalendarioPanel --> EventoDialog : creates
-    CalendarioTableModel --> EventoService : queries
-    CalendarioCellRenderer ..> DiaCalendario : renders
-    
-    %% Packages
-    classDef modelClass fill:#e1f5fe
-    classDef logicClass fill:#f3e5f5
-    classDef utilsClass fill:#fff3e0
-    classDef viewClass fill:#e8f5e8
-    classDef mainClass fill:#ffebee
-    
-    class Evento,Asistente,Conferencista,Invitado,Sponsor,Organizador modelClass
-    class EventoService logicClass
-    class FileManager,AsistenteValidator,ValidationResult,ValidationErrorDetail,ValidationError utilsClass
-    class MainFrame,EventoDialog,DetalleEventoDialog,CalendarioPanel,CalendarioTableModel,DiaCalendario,CalendarioCellRenderer viewClass
-    class Main mainClass
+
+%% Relaciones de Herencia
+    Asistente <|-- Conferencista
+    Asistente <|-- Invitado
+    Asistente <|-- Organizador
+    Asistente <|-- Sponsor
+
+%% Relaciones de Composición y Agregación
+    Evento "1" *-- "0..*" Asistente : contains
+    EventoService "1" *-- "0..*" Evento : manages
+    EventoService "1" -- "1" FileManager : uses
+
+%% Relaciones de Dependencia en las Vistas
+    MainFrame "1" -- "1" EventoService : uses
+    MainFrame "1" -- "1" CalendarioPanel : contains
+    MainFrame "1" ..> EventoDialog : creates
+    MainFrame "1" ..> DetalleEventoDialog : creates
+
+    DetalleEventoDialog "1" -- "1" EventoService : uses
+    DetalleEventoDialog "1" -- "1" Evento : displays
+
+    CalendarioPanel "1" -- "1" CalendarioTableModel : uses
+    CalendarioPanel "1" -- "1" EventoService : uses
+    CalendarioPanel "1" -- "1" MainFrame : parent
+
+    CalendarioTableModel "1" -- "1" EventoService : uses
+    CalendarioTableModel "1" *-- "0..*" DiaCalendario : creates
+
+%% Main class relationship
+    Main ..> MainFrame : creates
 ```
 
-## 📋 Descripción de Packages y Responsabilidades
+## Descripción de Packages y Responsabilidades
 
-### 🎯 **Package MODEL** (Azul claro)
+### **Package MODEL** 
 - **Evento**: Entidad principal del dominio
 - **Asistente**: Clase base para participantes (con herencia múltiple)
 - **Conferencista**: Especialización de Asistente con área de especialidad
@@ -744,9 +303,6 @@ classDiagram
 
 ### **Package UTILS**
 - **FileManager**: Persistencia en archivos de texto
-- **AsistenteValidator**: Validaciones centralizadas
-- **ValidationResult**: Encapsula resultados de validación
-- **ValidationError**: Enum de tipos de errores
 
 ### **Package VIEW**
 - **MainFrame**: Ventana principal con tabs
@@ -757,35 +313,4 @@ classDiagram
 - **CalendarioCellRenderer**: Renderizado personalizado
 
 ### **MAIN** 
-- **Main**: Punto de entrada de la aplicación
-
-
-##  Descripción de Packages y Responsabilidades
-
-###  **Package MODEL**
-- **Evento**: Entidad principal del dominio
-- **Asistente**: Clase base para participantes (con herencia múltiple)
-- **Conferencista**: Especialización de Asistente con área de especialidad
-- **Invitado**: Especialización de Asistente con intereses
-- **Sponsor**: Especialización de Asistente con información de patrocinio
-- **Organizador**: Especialización de Asistente con roles y responsabilidades
-
-### ️ **Package LOGIC**
-- **EventoService**: Servicio principal que maneja toda la lógica de negocio
-
-### ️ **Package UTILS**
-- **FileManager**: Persistencia en archivos de texto
-- **AsistenteValidator**: Validaciones centralizadas
-- **ValidationResult**: Encapsula resultados de validación
-- **ValidationError**: Enum de tipos de errores
-
-### ️ **Package VIEW**
-- **MainFrame**: Ventana principal con tabs
-- **EventoDialog**: Crear/editar eventos
-- **DetalleEventoDialog**: Gestión de asistentes
-- **CalendarioPanel**: Vista de calendario
-- **CalendarioTableModel**: Modelo de datos del calendario
-- **CalendarioCellRenderer**: Renderizado personalizado
-
-###  **MAIN** (Rosa claro)
 - **Main**: Punto de entrada de la aplicación
